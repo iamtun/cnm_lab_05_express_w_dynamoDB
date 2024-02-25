@@ -29,7 +29,9 @@
                         <td><%= item.count.N %></td>
                         <td>
                             <a href="#">Update</a>
-                            <a href="#">Delete</a>
+                            <form action="/delete/<%= item.id.S %>" method="post">
+                                <button type="submit">Delete</button>
+                            </form></a>
                         </td>
                     </tr>
                 <% }); %>

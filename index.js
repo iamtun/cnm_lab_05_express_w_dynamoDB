@@ -1,6 +1,7 @@
 ﻿import express from 'express';
 import bodyParser from 'body-parser';
 import {
+    DeleteItemCommand,
     DynamoDBClient,
     PutItemCommand,
     ScanCommand,
@@ -58,12 +59,32 @@ app.post('/items', async (req, res) => {
         },
     });
 
-    try {
-        await docClient.send(command);
-        return res.redirect('/');
-    } catch (err) {
-        return console.log(err);
-    }
+    return docClient
+        .send(command)
+        .then(() => {
+            return res.redirect('/');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.post('/delete/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const command = new DeleteItemCommand({
+        TableName: TABLE_NAME,
+        Key: {
+            id: { S: id },
+        },
+    });
+
+    return docClient
+        .send(command)
+        .then(() => {
+            return res.redirect('/');
+        })
+        .catch((err) => console.log(err));
 });
 
 app.listen(PORT, () => {

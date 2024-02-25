@@ -4,8 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1>Hello word</h1>
+    <form action="/items" method="post">
+        <input type="text" name="name" placeholder="name">
+        <input type="number" name="count" placeholder="count">
+        <button type="submit">Send</button>
+    </form>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Count</th>
+            <th>Actions</th>
+        </thead>
+
+        <tbody>
+            <tr>
+                <% Items.forEach(item => { %>
+                    <tr>
+                        <td><%= item.id.S %></td>
+                        <td><%= item.name.S %></td>
+                        <td><%= item.count.N %></td>
+                        <td>
+                            <a href="#">Update</a>
+                            <a href="#">Delete</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

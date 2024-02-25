@@ -1,6 +1,8 @@
 ﻿import express from 'express';
+import bodyParser from 'body-parser';
 import {
     DynamoDBClient,
+    PutItemCommand,
     ScanCommand,
 } from '@aws-sdk/client-dynamodb';
 
@@ -24,6 +26,7 @@ const app = express();
 
 //register middlewares
 app.use(express.json({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('./views'));
 
 //config view
@@ -38,8 +41,29 @@ app.get('/', (req, res) => {
 
     docClient
         .send(command)
-        .then(({ Items }) => console.log(Items))
+        .then(({ Items }) => {
+            return res.render('index', { Items });
+        })
         .catch((err) => console.log(err));
+});
+
+app.post('/items', async (req, res) => {
+    const { name, count } = req.body;
+    const command = new PutItemCommand({
+        TableName: TABLE_NAME,
+        Item: {
+            id: { S: `${new Date().getTime()}` },
+            name: { S: name },
+            count: { N: `${count}` },
+        },
+    });
+
+    try {
+        await docClient.send(command);
+        return res.redirect('/');
+    } catch (err) {
+        return console.log(err);
+    }
 });
 
 app.listen(PORT, () => {

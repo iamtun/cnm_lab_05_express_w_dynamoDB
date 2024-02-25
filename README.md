@@ -3,3 +3,7 @@
 
 ### 1. add packages:
 - Run: `npm i nodemon express ejs aws-sdk`
+
+### 2. learn dynamoDB w nodejs: 
+
+- `https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-dynamodb-utilities.html`

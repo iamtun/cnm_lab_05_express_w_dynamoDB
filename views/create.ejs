@@ -7,32 +7,27 @@
         <link rel="stylesheet" href="/index.css" />
     </head>
     <body>
-        <% if (Item) { %>
         <form action="/items" method="post">
-            <input type="text" hidden value="<%= Item.id.S %>" name="id" />
+            <input
+                type="text"
+                hidden
+                value="<%= Item ? Item.id.S : '' %>"
+                name="id"
+            />
             <input
                 type="text"
                 name="name"
                 placeholder="name"
-                value="<%= Item.name.S %>"
+                value="<%= Item ? Item.name.S : '' %>"
             />
 
             <input
                 type="number"
                 name="count"
                 placeholder="count"
-                value="<%= Item.count.N %>"
+                value="<%= Item ? Item.count.N : '' %>"
             />
             <button type="submit">Send</button>
         </form>
-        <% } else { %>
-        <form action="/items" method="post">
-            <input type="text" hidden />
-            <input type="text" name="name" placeholder="name" />
-
-            <input type="number" name="count" placeholder="count" />
-            <button type="submit">Send</button>
-        </form>
-        <% } %>
     </body>
 </html>

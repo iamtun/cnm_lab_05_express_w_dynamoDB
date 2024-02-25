@@ -103,7 +103,6 @@ app.get('/items/:id', async (req, res) => {
     });
 
     return docClient.send(command).then(({ Item }) => {
-        console.log(Item);
         return res.render('create', { Item });
     });
 });

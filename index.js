@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import {
     DeleteItemCommand,
     DynamoDBClient,
+    GetItemCommand,
     PutItemCommand,
     ScanCommand,
 } from '@aws-sdk/client-dynamodb';
@@ -49,11 +50,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/items', async (req, res) => {
-    const { name, count } = req.body;
+    const { id = '', name, count } = req.body;
     const command = new PutItemCommand({
         TableName: TABLE_NAME,
         Item: {
-            id: { S: `${new Date().getTime()}` },
+            id: { S: `${id ? id : new Date().getTime()}` },
             name: { S: name },
             count: { N: `${count}` },
         },
@@ -69,7 +70,7 @@ app.post('/items', async (req, res) => {
         });
 });
 
-app.post('/delete/:id', async (req, res) => {
+app.post('/items/:id/delete', async (req, res) => {
     const { id } = req.params;
 
     const command = new DeleteItemCommand({
@@ -85,6 +86,26 @@ app.post('/delete/:id', async (req, res) => {
             return res.redirect('/');
         })
         .catch((err) => console.log(err));
+});
+
+app.get('/create', (req, res) => {
+    return res.render('create', { Item: null });
+});
+
+app.get('/items/:id', async (req, res) => {
+    const { id } = req.params;
+
+    const command = new GetItemCommand({
+        TableName: TABLE_NAME,
+        Key: {
+            id: { S: id },
+        },
+    });
+
+    return docClient.send(command).then(({ Item }) => {
+        console.log(Item);
+        return res.render('create', { Item });
+    });
 });
 
 app.listen(PORT, () => {

@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="/index.css">
 </head>
 <body>
-    <form action="/items" method="post">
-        <input type="text" name="name" placeholder="name">
-        <input type="number" name="count" placeholder="count">
-        <button type="submit">Send</button>
+    <form action="/create" method="get">
+        <button>create</button>
     </form>
     <table>
         <thead>
@@ -28,10 +26,12 @@
                         <td><%= item.name.S %></td>
                         <td><%= item.count.N %></td>
                         <td>
-                            <a href="#">Update</a>
-                            <form action="/delete/<%= item.id.S %>" method="post">
+                            <form action="/items/<%= item.id.S %>" method="get">
+                                <button type="submit">Update</button>
+                            </form>
+                            <form action="/items/<%= item.id.S %>/delete" method="post">
                                 <button type="submit">Delete</button>
-                            </form></a>
+                            </form>
                         </td>
                     </tr>
                 <% }); %>
